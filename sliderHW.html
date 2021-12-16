@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .container {
+            position: relative;
+            width: 500px;
+            height: 100px;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+
+        .lightblue {
+            background-color: lightblue;
+        }
+
+        .lightpink {
+            background-color: lightpink;
+        }
+
+        .lightyellow {
+            background-color: lightyellow;
+        }
+
+        ul {
+            width: 400%;
+            height: 100%;
+            transition: all 0.4s;
+        }
+
+        li {
+            float: left;
+            width: 500px;
+            height: 100px;
+        }
+
+        button {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: lightcoral;
+        }
+
+        #L {
+            left: 0;
+            top: 50%;
+        }
+
+        #R {
+            right: 0;
+            top: 50%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul>
+            <li class="lightblue">1</li>
+            <li class="lightpink">2</li>
+            <li class="lightyellow">3</li>
+            <li class="lightblue">1</li>
+        </ul>
+
+        <button id='L'>
+            L
+        </button>
+
+        <button id='R'>
+            R
+        </button>
+    </div>
+</body>
+
+<script>
+    const btnL = document.getElementsByTagName('button')[0];
+    const btnR = document.getElementsByTagName('button')[1];
+    let ulEl = document.querySelector('ul');
+    let counter = 0;
+    console.log(btnL, btnR, ulEl);
+
+    btnL.onclick = function () {
+        move(this, ulEl);
+    };
+
+    btnR.onclick = function () {
+        move(this, ulEl);
+    };
+
+    function move(btn, ele) {
+        // judge move to left or right, if btn == btnL, move left, n = -500;  otherwise move right, n = 500.
+        let n = btn == btnL ? -ele.firstElementChild.offsetWidth : ele.firstElementChild.offsetWidth;
+        console.log('This is how much to move the container: ' + n + 'px');
+
+        // if last element is reached, switch to the first element.
+        if (counter == -3 && n > 0) {  // right
+            ele.style.transition = 'none';
+            ele.style.transform = 'translateX(0px)';
+            console.log('teleport to the first element pos');
+            counter = 0;
+        }
+
+        if (counter == 0 && n < 0) {  // left
+            ele.style.transition = 'none';
+            ele.style.transform = `translateX(${-3 * Math.abs(n)}px)`;
+            console.log('teleport to the last element pos');
+            counter = -3;
+        }
+
+        // n < 0 means move to left, so counter --.
+        n < 0 ? counter++ : counter--;
+        console.log('counter is ' + counter);
+
+        ele.offsetHeight;  // mandatory rendering ** problem happens without it **
+        ele.style.transition = '0.4s';
+        ele.style.transform = `translateX(${counter * Math.abs(n)}px)`;
+    }
+
+</script>
+
+</html>
